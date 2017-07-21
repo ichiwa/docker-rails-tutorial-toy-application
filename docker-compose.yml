@@ -1,0 +1,26 @@
+  version: '2'
+  services:
+    rails-db:
+      container_name: rails-db
+      image: mysql:5.7
+      hostname: rails-db
+      expose:
+        - 3306
+      ports:
+        - "3306:3306"
+      environment:
+        - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+        - MYSQL_DATABASE=rails_tutorial_toy_db
+      volumes:
+        - "./docker/var/lib/mysql:/var/lib/mysql"
+
+    rails-app:
+      container_name: rails-app
+      build: .
+      command: ["sh", "bin/entry"]
+      volumes:
+        - .:/src
+      ports:
+        - "3000:3000"
+      links:
+        - rails-db
